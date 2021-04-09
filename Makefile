@@ -8,12 +8,14 @@ BINARY := p2
 GOOS := linux
 GOARCH := amd64
 
+MAKEFLAGS += --no-print-directory
+
 DOCKER_BUILD := docker build --build-arg VERSION=$(VERSION) --build-arg GO_VER=$(GO_VER) --build-arg GOOS=$(GOOS) --build-arg GOARCH=$(GOARCH)
 
 all: vet test p2
 
 $(BINARY): $(GO_SRC)
-	@mkdir -p $(dir $(BINARY))
+	@mkdir -p $(dir $@)
 ifeq ($(GOARCH),armv6)
 	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=arm GOARM=6 $(GO) build -a -ldflags "-s -w -extldflags '-static' -X main.Version=$(VERSION)" -o $@ .
 else
@@ -59,4 +61,5 @@ build-slim: build
 
 .PHONY: release
 release:
-	GOOS=linux GOARCH=amd64 make clean build-slim BINARY=release/p2-v$(VERSION)-linux-amd64
+	make build-slim BINARY=release/p2-v$(VERSION)-linux-amd64 GOOS=linux GOARCH=amd64
+	make build-slim BINARY=release/p2-v$(VERSION)-darwin-arm64 GOOS=darwin GOARCH=arm64
