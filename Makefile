@@ -62,4 +62,4 @@ build-slim: build
 .PHONY: release
 release:
 	make build-slim BINARY=release/p2-v$(VERSION)-linux-amd64 GOOS=linux GOARCH=amd64
-	make build-slim BINARY=release/p2-v$(VERSION)-darwin-arm64 GOOS=darwin GOARCH=arm64
+	make build BINARY=release/p2-v$(VERSION)-darwin-arm64 GOOS=darwin GOARCH=arm64
